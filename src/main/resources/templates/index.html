@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INVOICE</title>
+    <link rel="icon" href="logo.png" type="image/png">
+    <style type="text/css">
+        * {
+            border: 0;
+            box-sizing: content-box;
+            color: inherit;
+            font-family: inherit;
+            font-size: inherit;
+            font-style: inherit;
+            font-weight: inherit;
+            line-height: inherit;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            vertical-align: top;
+        }
+
+        html {
+            font-family: 'Open Sans', sans-serif;
+            overflow: auto; padding: 0.5in;
+            background: #999;
+            cursor: default;
+        }
+
+        body {
+            box-sizing: border-box;
+            height: 11in;
+            margin: 0 auto;
+            overflow: hidden;
+            padding: 0.5in;
+            width: 8.5in;
+            background: #FFF;
+            border-radius: 1px;
+            box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5);
+        }
+        header {
+            margin-top: 10rem;
+        }
+
+        header > h1 {
+            text-align: center;
+            font-size: 1.5rem;
+        }
+        header > hr {
+            border-bottom: 0.063rem solid black;
+        }
+
+        header > .inline-left {
+            float: left;
+        }
+
+        header > .inline-left> .organisation-name {
+            height: 2rem;
+            font-weight: bold;
+        }
+
+        header> .inline-right {
+            float: right;
+        }
+
+        table {
+            font-size: 75%;
+            table-layout: fixed; width: 100%;
+            border-collapse: separate;
+            border-spacing: 2px; }
+        th {
+            padding: 0.5em;
+            position: relative;
+            text-align: left;
+        }
+        td {
+            border: 1px solid rgb(192, 192, 192); padding: 0.5em;
+            position: relative;
+            text-align: left;
+        }
+
+        table.inventory { margin: 0 0 3em; }
+
+        table.balance { float: right; width: 45%; }
+        table.balance:after { clear: both; content: ""; display: table; }
+
+
+        table.inventory { clear: both; width: 100%; }
+        table.inventory th { font-weight: bold; text-align: center; }
+
+        table.inventory td:nth-child(1) { text-align: left; }
+        table.inventory td:nth-child(2) { text-align: left;}
+        table.inventory td:nth-child(3) { text-align: center; }
+        table.inventory td:nth-child(4) { text-align: center; }
+        table.inventory td:nth-child(5) { text-align: left; }
+
+        table.balance th, table.balance td { width: 50%; }
+        table.balance td { text-align: right; }
+
+        .add, .cut
+        {
+            border-width: 1px;
+            display: block;
+            font-size: .8rem;
+            padding: 0.25em 0.5em;
+            float: left;
+            text-align: center;
+            width: 0.6em;
+
+            background: #9AF;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            background-image: -moz-linear-gradient(#00ADEE 5%, #0078A5 100%);
+            background-image: -webkit-linear-gradient(#00ADEE 5%, #0078A5 100%);
+            border-radius: 0.5em;
+            border-color: #0076A3;
+            color: #FFF;
+            cursor: pointer;
+            font-weight: bold;
+            text-shadow: 0 -1px 2px rgba(0,0,0,0.333);
+        }
+
+        .add { margin: -2.5em 0 0; }
+
+        .add:hover { background: #00ADEE; }
+
+        .cut { opacity: 0; position: absolute; top: 0; left: -1.5em; }
+
+        tr:hover .cut { opacity: 1; }
+
+        @media print {
+            * { -webkit-print-color-adjust: exact; }
+            html { background: none; padding: 0; }
+            body { box-shadow: none; margin: 0; }
+            td { border: none; }
+            span:empty { display: none; }
+            .add, .cut { display: none; }
+        }
+
+        @page {
+            margin: 0;
+        }
+    </style>
+    <script>
+        var rowNumber = 1;
+
+
+        function addRow(){
+            rowNumber++;
+            var table = document.getElementById("inventory");
+            var row = table.insertRow(rowNumber);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            var cell5 = row.insertCell(4);
+
+            cell1.innerHTML = '<button class="cut" onclick="deleteRow(this.parentNode.parentNode.rowIndex)">-</button><span><input type="number" min="0" onkeyup="if(this.value<0){this.value= this.value * -1}" name="qty" style="width: 100%;"></span>';
+            cell2.innerHTML = '<span><textarea cols="30" rows="1" name="description"></textarea></span>';
+            cell3.innerHTML = '<span><input type="text" name="weight" style="text-align: center; width: 100%;"></span>';
+            cell4.innerHTML = '<span>&#8377; <input type="number" min="0" onkeyup="if(this.value<0){this.value= this.value * -1}" name="rate" style="text-align: left; width: 90%;"></span>';
+            cell5.innerHTML = '';
+        }
+
+        function deleteRow(i){
+            rowNumber--;
+
+            var balanceRow1 = document.getElementById("balanceRow");
+            var balanceCells = balanceRow1.getElementsByTagName("td");
+
+            let currentRowTotal = document.getElementById('inventory').querySelectorAll("tr")[i].cells[4].innerText;
+            currentRowTotal = currentRowTotal.replace( /[^\d\.]*/g, '');
+
+            let gTotal = balanceCells[0].innerText;
+            gTotal = gTotal.replace( /[^\d\.]*/g, '');
+
+            let modifiedTotal = parseFloat(gTotal) - parseFloat(currentRowTotal);
+            modifiedTotal = parseFloat(modifiedTotal).toFixed(2);
+
+            balanceCells[0].innerHTML = '<span>&#8377; </span><span>'+ modifiedTotal +'</span>';
+
+            document.getElementById('inventory').deleteRow(i);
+
+        }
+
+        function calculate() {
+
+            var inventoryTbl = document.getElementById("inventory");
+            var inventoryRowsNumber = inventoryTbl.querySelectorAll("tr").length;
+            var grandTotal = 0;
+
+            for(let i = 1; i < inventoryRowsNumber; i++) {
+                let cells = inventoryTbl.querySelectorAll("tr")[i].cells;
+                let c_cell1 = cells[0].getElementsByTagName("input")[0].value;
+                let c_cell3 = cells[2].getElementsByTagName("input")[0].value;
+                let c_cell4 = cells[3].getElementsByTagName("input")[0].value;
+                let total;
+                if(c_cell3.toLowerCase() == 'each') {
+                    total = c_cell1 * c_cell4;
+                }
+                else {
+                    total = c_cell3 * c_cell4;
+                }
+
+                total = parseFloat(total).toFixed(2);
+                cells[4].innerHTML = '<span>&#8377; </span><span id="total">'+ total +'</span>';
+            }
+
+            for(let i = 1; i < inventoryRowsNumber; i++) {
+                let cells = inventoryTbl.querySelectorAll("tr")[i].cells;
+                let c_cell5 = cells[4].innerText;
+                c_cell5 = parseFloat(c_cell5.replace( /[^\d\.]*/g, ''));
+                grandTotal += c_cell5;
+                grandTotal = parseFloat(grandTotal)
+            }
+
+            var balanceRow1 = document.getElementById("balanceRow");
+            var balanceCells = balanceRow1.getElementsByTagName("td");
+            balanceCells[0].innerHTML = '<span>&#8377; </span><span>'+ grandTotal +'</span>';
+
+        }
+
+    </script>
+
+</head>
+<body onchange="calculate()">
+<header>
+    <h1 style="margin-bottom: 0.25rem;">INVOICE</h1>
+    <hr>
+
+    <br>
+    <div class="inline-left">
+            <span class="organisation-name">
+                M/s.
+                <input type="text" placeholder="Organisation Name" style="width: 16rem;">
+            </span>
+        <br>
+        <input type="text" style="width: 16rem; font-weight: bold; margin-left: 2rem;">
+        <br>
+        <textarea id="address" cols="30" rows="4" placeholder="Address..."></textarea>
+    </div>
+
+    <div class="inline-right">
+        <span style="font-weight: bold;"> Bill No.:</span>
+        <span>
+                <input type="text" placeholder="Bill Number" style="width: 13rem;">
+            </span>
+        <br>
+        <span style="font-weight: bold;">Date:</span>
+        <span>
+                <input type="date">
+            </span>
+        <br>
+        <span style="font-weight: bold;">Challans Included:</span>
+        <span>
+                <input type="text" placeholder="Challans Number" style="width: 13rem;">
+            </span>
+        <br>
+        <span>
+                <input type="text" style="width: 13rem;">
+            </span>
+        <br>
+        <span>
+                <input type="text" style="width: 13rem;">
+            </span>
+    </div>
+</header>
+
+<div class="container" style="text-align: center; margin-top: 9rem;">
+    <span style="border-bottom: 1px solid black;">FOR LABOUR CHARGES ONLY</span>
+    <table class="inventory" id="inventory" style="margin-top: 1rem;">
+        <thead>
+        <tr>
+            <th style="width: 15%;"><span style="border-bottom: 1px solid black;">Qty</span></th>
+            <th style="width: 30%;"><span style="border-bottom: 1px solid black;">Description</span></th>
+            <th style="width: 15%;"><span style="border-bottom: 1px solid black;">Weight</span></th>
+            <th style="width: 20%;"><span style="border-bottom: 1px solid black;">Rate</span></th>
+            <th style="width: 20%;"><span style="border-bottom: 1px solid black;">Total</span></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td style="width: 15%;"><button class="cut" onclick="deleteRow(this.parentNode.parentNode.rowIndex)">-</button><span><input type="number" min="0" onkeyup="if(this.value<0){this.value= this.value * -1}" name="qty" style="width: 100%;"></span></td>
+            <td style="width: 30%;"><span><textarea cols="30" rows="1" name="description"></textarea></span></td>
+            <td style="width: 15%;"><span><input type="text" name="weight" style="text-align: center; width: 100%;"></span></td>
+            <td style="width: 20%;"><span>&#8377; <input type="number" min="0" onkeyup="if(this.value<0){this.value= this.value * -1}" name="rate" style="text-align: left; width: 90%;"></span></td>
+            <td style="width: 20%;"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <button class="add" onclick="addRow()">+</button>
+
+    <table class="balance">
+        <tr id="balanceRow">
+            <th><span style="font-weight: bold; border-bottom: 1px solid black;">Total After Rounding Off</span></th>
+            <td style="text-align: left;"></td>
+        </tr>
+    </table>
+</div>
+
+<div style="margin-top: 2rem;">
+    <div style="text-align: left;">
+        <span style="font-weight: 2rem; border-bottom: 1px solid black;">Company Bank Details</span>
+    </div>
+    <table style="width: 33%;">
+        <tr>
+            <th>Bank Name: </th>
+            <td>Bank of India</td>
+        </tr>
+        <tr>
+            <th>A/C No.: </th>
+            <td>74388583868945</td>
+        </tr>
+        <tr>
+            <th>Branch & IFSC Code :</th>
+            <td>Dasnagar & DFRF1492549</td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
