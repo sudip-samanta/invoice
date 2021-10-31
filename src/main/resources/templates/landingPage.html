@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Aptech | Home</title>
+    <link rel="icon" th:href="@{/images/logo.png}" type="image/png">
+    <style type="text/css">
+        body {
+            text-align: center;
+        }
+        button {
+            width: 9rem;
+            height: 4rem;
+            border-radius: 10px;
+        }
+        button:hover {
+            cursor: pointer;
+            background-color: pink;
+        }
+    </style>
+
+</head>
+<body>
+    <div>
+        <h1>Welcome to aptech...</h1>
+    </div>
+    <form th:action="@{/aptechenterprise/v1/invoice}" method="get">
+        <button type="submit">Invoice</button>
+    </form>
+    <br> <br>
+    <form action="" method="get">
+        <button type="submit">Certificate</button>
+    </form>
+
+</body>
+</html>
