@@ -17,4 +17,9 @@ public class InvoiceController {
         return "index";
     }
 
+    @GetMapping("/aptechenterprise/v1/certificate")
+    public String getCertficatePage() {
+        return "certificate";
+    }
+
 }

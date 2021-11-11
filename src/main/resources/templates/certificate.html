@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aptech | Certificate</title>
+    <link rel="icon" th:href="@{/images/logo.png}" type="image/png">
+    <style type="text/css">
+        /* :root {
+            --footer-position: calc(100vh - 25rem);
+        } */
+        * {
+            border: 0;
+            box-sizing: content-box;
+            color: inherit;
+            font-family: inherit;
+            font-size: inherit;
+            font-style: inherit;
+            font-weight: inherit;
+            line-height: inherit;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            vertical-align: top;
+        }
+
+        html {
+            font-family: 'Open Sans', sans-serif;
+            overflow: auto; padding: 0.5in;
+            background: #999;
+            cursor: default;
+        }
+
+        body {
+            box-sizing: border-box;
+            height: 11in;
+            margin: 0 auto;
+            overflow: hidden;
+            padding: 0.5in;
+            width: 8.5in;
+            background: #FFF;
+            border-radius: 1px;
+            box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5);
+        }
+        header {
+            margin-top: 8.1rem;
+        }
+
+        .add, .cut
+        {
+            border-width: 1px;
+            display: block;
+            font-size: .8rem;
+            padding: 0.25em 0.5em;
+            float: left;
+            text-align: center;
+            width: 0.6em;
+
+            background: #9AF;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            background-image: -moz-linear-gradient(#00ADEE 5%, #0078A5 100%);
+            background-image: -webkit-linear-gradient(#00ADEE 5%, #0078A5 100%);
+            border-radius: 0.5em;
+            border-color: #0076A3;
+            color: #FFF;
+            cursor: pointer;
+            font-weight: bold;
+            text-shadow: 0 -1px 2px rgba(0,0,0,0.333);
+        }
+
+        .add { margin: -2.5em 0 0; }
+
+        .add:hover { background: #00ADEE; }
+
+        .cut { opacity: 0; position: absolute; top: 0; left: -1.5em; }
+
+        tr:hover .cut { opacity: 1; }
+
+        input, textarea {
+            border: 0.5px solid gray;
+        }
+
+        /* footer {
+            transform: translatey(calc(11in - 45rem));
+        } */
+        div.inline-left {
+            float: left;
+        }
+
+        div.inline-left> .organisation-name {
+            height: 2rem;
+            font-weight: bold;
+        }
+
+        div.inline-right {
+            float: right;
+        }
+
+        hr.marked-line {
+            border-top: 1px dotted black;
+        }
+
+        table.inventory {
+            font-size: 75%;
+            table-layout: fixed;
+            width: 100%;
+            height: 50.5vh !important;
+            border-collapse: separate;
+            border-spacing: 2px;
+        }
+        table.inventory th {
+            padding: 0.3em;
+            position: relative;
+            text-align: left;
+        }
+        table.inventory td {
+            border: 1px solid rgb(192, 192, 192);
+            position: relative;
+            text-align: left;
+        }
+
+        table.inventory { margin: 0 0 3em; }
+
+
+        table.inventory { clear: both; width: 100%; }
+        table.inventory th { font-weight: bold; text-align: center; }
+
+        table.inventory td:nth-child(1) { text-align: left; width: 9%;}
+        table.inventory td:nth-child(2) { text-align: left; width: 43%;}
+        table.inventory td:nth-child(3) { text-align: center; width: 14%;}
+        table.inventory td:nth-child(4) { text-align: center; width: 22%;}
+        table.inventory td:nth-child(5) { width: 12%; vertical-align: middle; text-align: center;}
+
+
+        @media print {
+            * { -webkit-print-color-adjust: exact; }
+            html { background: none; padding: 0; }
+            body { box-shadow: none; margin: 0; }
+            input, textarea { border: none !important; }
+            span:empty { display: none; }
+            .add, .cut { display: none; }
+            footer { position: fixed; }
+            table.inventory>tbody>tr>td { border: none !important; }
+        }
+
+        @page {
+            margin: 0;
+        }
+    </style>
+
+    <script>
+        var rowNumber = 1;
+
+        function addRow(){
+            rowNumber++;//2
+            var table = document.getElementById("inventory");
+            var row = table.insertRow(rowNumber);
+            var cell1 = row.insertCell(0);
+            var cell2 = row.insertCell(1);
+            var cell3 = row.insertCell(2);
+            var cell4 = row.insertCell(3);
+            var cell5 = row.insertCell(4);
+
+            cell1.innerHTML = '<button class="cut" onclick="deleteRow(this.parentNode.parentNode.rowIndex)">-</button><span><input type="text" style="width: 95%; text-align: center; height: 1.8rem;">';
+            cell2.innerHTML = '<span><textarea cols="46"rows="2" style="text-align: left; padding-left: 0.2rem;"></textarea></span>';
+            cell3.innerHTML = '<span><input type="text" style="text-align: center; width: 100%; height: 1.8rem;"></span>';
+            cell4.innerHTML = '<span><textarea cols="21" rows="2" style="text-align: left; padding-left: 00.2rem;"></textarea></span>';
+            cell5.innerHTML = '';
+        }
+
+        function deleteRow(i){
+            rowNumber--;
+            document.getElementById('inventory').deleteRow(i);
+
+        }
+    </script>
+
+</head>
+<body>
+<header>
+    <div style="text-align: center;">
+        <span style="border-bottom: 1px solid black; font-size: 1.5rem;">HARDNESS CERTIFICATE</span>
+    </div>
+
+    <br>
+    <div class="inline-left">
+        <table>
+            <tr>
+                <th style="text-align: left; font-weight: bold;">REF. NO. AE/.</th>
+                <td><input type="text" style="width: 19rem"></td>
+            </tr>
+            <tr>
+                <th style="text-align: left; font-weight: bold;">P. O. NO.: </th>
+                <td><input type="text" style="width: 19rem"></td>
+            </tr>
+            <tr>
+                <th style="text-align: left; font-weight: bold;">DRG. NO.: </th>
+                <td><input type="text" style="width: 19rem"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="inline-right">
+        <table>
+            <tr>
+                <th style="text-align: left; font-weight: bold;">DATED: </th>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <th style="text-align: left; font-weight: bold;">DATED: </th>
+                <td><input type="text"></td>
+            </tr>
+            <tr>
+                <th style="text-align: left; font-weight: bold;">Requirded Value: </th>
+                <td><input type="text"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="margin-top: 1rem;">
+        <table>
+            <tr>
+                <th style="text-align: left; font-weight: bold;">MATERIAL RECEIVED ON:</th>
+                <td><input type="text" style="width: 8rem;"></td>
+                <th style="text-align: left; font-weight: bold;">MATERIAL TESTED ON:</th>
+                <td><input type="text"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <table>
+            <tr>
+                <th style="text-align: left; font-weight: bold;">MATERIAL'S SPECIFICATION:</th>
+                <td><textarea cols="55" rows="1"></textarea></td>
+            </tr>
+        </table>
+    </div>
+
+    <div>
+        <table>
+            <tr>
+                <th style="text-align: left; font-weight: bold;">Messrs:</th>
+                <td><input type="text" placeholder="Organizanization Name" style="width: 35rem; padding-left: 0.5rem; font-weight: bold;"></td>
+            </tr>
+            <tr>
+                <td colspan="2"><textarea cols="76" rows="2" placeholder="Address.." style="padding-left: 0.5rem;"></textarea></td>
+            </tr>
+        </table>
+    </div>
+    <hr class="marked-line">
+    <div style="margin-top: 0.5rem; margin-bottom: 0.5rem;">
+        <p style="font-size: 0.9rem; font-weight: bold;">
+            Certified the following materials have been properly heat treated as per relevent specification at our works
+            & the following hardness observed in our testing machine & found no cracks or other defects with our knowledge
+            & supervision.
+        </p>
+    </div>
+    <hr class="marked-line">
+</header>
+
+<div class="container" style="text-align: center; margin-top: 0.5rem;">
+    <table class="inventory" id="inventory">
+        <thead>
+        <tr>
+            <th style="width: 9%;"><span style="border-bottom: 1px solid black;">Qty</span></th>
+            <th style="width: 43%; text-align: left; padding-left: 1rem;"><span style="border-bottom: 1px solid black;">Description</span></th>
+            <th style="width: 14%;"><span style="border-bottom: 1px solid black;">No. of observation taken</span></th>
+            <th style="width: 22%;"><span style="border-bottom: 1px solid black;">Hardness in BHN/RC</span></th>
+            <th style="width: 12%;"><span style="border-bottom: 1px solid black;">Remarks</span></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><button class="cut" onclick="deleteRow(this.parentNode.parentNode.rowIndex)">-</button><span><input type="text" style="width: 95%; text-align: center; height: 1.8rem;"></span></td>
+            <td><span><textarea cols="46"rows="2" style="text-align: left; padding-left: 0.2rem;"></textarea></span></td>
+            <td><span><input type="text" style="text-align: center; width: 100%; height: 1.8rem;"></span></td>
+            <td><span><textarea cols="21" rows="2" style="text-align: left; padding-left: 00.2rem;"></textarea></span></td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+    <button class="add" onclick="addRow()">+</button>
+</div>
+
+<footer>
+    <div class="inline-left">
+        <table>
+            <tr>
+                <th style="text-align: left; font-weight: bold; width: 10rem !important;">Hardness tested by: </th>
+                <td><input type="text" style="width: 23rem"></td>
+            </tr>
+            <tr>
+                <th style="text-align: left; font-weight: bold; width: 8rem;">Model No.: </th>
+                <td><input type="text" style="width: 23rem"></td>
+            </tr>
+            <tr>
+                <th style="text-align: left; font-weight: bold;">Machine Sl. No.:</th>
+                <td><input type="text" style="width: 23rem"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="inline-right">
+        <table>
+            <tr>
+                <td style="text-align: center; font-weight: bold;"><span>Signature</span></td>
+            </tr>
+            <tr>
+                <td style="height: 1.5rem;"></td>
+            </tr>
+            <tr>
+                <td style="text-align: center; font-weight: bold;"><span>For Aptech Enterprise</span></td>
+            </tr>
+        </table>
+    </div>
+</footer>
+</body>
+</html>
