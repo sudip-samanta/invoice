@@ -57,7 +57,6 @@
             float: left;
             text-align: center;
             width: 0.6em;
-
             background: #9AF;
             box-shadow: 0 1px 2px rgba(0,0,0,0.2);
             background-image: -moz-linear-gradient(#00ADEE 5%, #0078A5 100%);
@@ -89,11 +88,6 @@
             float: left;
         }
 
-        div.inline-left> .organisation-name {
-            height: 2rem;
-            font-weight: bold;
-        }
-
         div.inline-right {
             float: right;
         }
@@ -102,18 +96,41 @@
             border-top: 1px dotted black;
         }
 
+        hr#foo {
+        border: none;
+        height: 1px;
+        background-image: linear-gradient(to right, #f0f0f0, #8f8f8f, #f0f0f0);
+        margin-top: 0.5rem;
+        }
+
+        hr#foo::after {
+        content: '********';
+        display: inline-block;
+        position: relative;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        transform-origin: 50% 50%;
+        background-color: white;
+        }
+
         table.inventory {
             font-size: 75%;
             table-layout: fixed;
             width: 100%;
-            height: 50.5vh !important;
+            height: 48vh !important;
             border-collapse: separate;
             border-spacing: 2px;
+            margin: 0 0 3em;
+            clear: both;
+            width: 100%;
         }
         table.inventory th {
             padding: 0.3em;
             position: relative;
             text-align: left;
+            font-weight: bold;
+            font-size: 0.85rem;
+            text-align: center;
         }
         table.inventory td {
             border: 1px solid rgb(192, 192, 192);
@@ -121,17 +138,11 @@
             text-align: left;
         }
 
-        table.inventory { margin: 0 0 3em; }
-
-
-        table.inventory { clear: both; width: 100%; }
-        table.inventory th { font-weight: bold; text-align: center; }
-
         table.inventory td:nth-child(1) { text-align: left; width: 9%;}
-        table.inventory td:nth-child(2) { text-align: left; width: 43%;}
+        table.inventory td:nth-child(2) { text-align: left; width: 47%;}
         table.inventory td:nth-child(3) { text-align: center; width: 14%;}
         table.inventory td:nth-child(4) { text-align: center; width: 22%;}
-        table.inventory td:nth-child(5) { width: 12%; vertical-align: middle; text-align: center;}
+        table.inventory td:nth-child(5) { width: 8%; vertical-align: middle; text-align: center;}
 
 
         @media print {
@@ -163,10 +174,10 @@
             var cell4 = row.insertCell(3);
             var cell5 = row.insertCell(4);
 
-            cell1.innerHTML = '<button class="cut" onclick="deleteRow(this.parentNode.parentNode.rowIndex)">-</button><span><input type="text" style="width: 95%; text-align: center; height: 1.8rem;">';
-            cell2.innerHTML = '<span><textarea cols="46"rows="2" style="text-align: left; padding-left: 0.2rem;"></textarea></span>';
-            cell3.innerHTML = '<span><input type="text" style="text-align: center; width: 100%; height: 1.8rem;"></span>';
-            cell4.innerHTML = '<span><textarea cols="21" rows="2" style="text-align: left; padding-left: 00.2rem;"></textarea></span>';
+            cell1.innerHTML = '<button class="cut" onclick="deleteRow(this.parentNode.parentNode.rowIndex)">-</button><span><input type="text" style="width: 95%; text-align: center; font-size: 0.80rem; height: 2.5rem;"></span>';
+            cell2.innerHTML = '<span><textarea cols="46"rows="2" style="text-align: left; height: 2.5rem; width: 20rem; font-size: 0.85rem; padding-left: 0.2rem;"></textarea></span>';
+            cell3.innerHTML = '<span><input type="text" style="text-align: center; width: 100%; font-size: 0.80rem; height: 2.5rem;"></span>';
+            cell4.innerHTML = '<span><textarea cols="21" rows="2" style="text-align: left; font-size: 0.80rem; width: 9rem; height: 2.5rem; padding-left: 00.2rem;"></textarea></span>';
             cell5.innerHTML = '';
         }
 
@@ -189,15 +200,28 @@
         <table>
             <tr>
                 <th style="text-align: left; font-weight: bold;">REF. NO. AE/.</th>
-                <td><input type="text" style="width: 19rem"></td>
+                <td><input type="text" style="width: 18.5rem"></td>
             </tr>
+        </table>
+    </div>
+    <div class="inline-right">
+        <table>
+            <tr>
+                <th style="text-align: left; font-weight: bold;">DATED: </th>
+                <td><input type="text" style=" width: 7rem;"></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="inline-left">
+        <table>
             <tr>
                 <th style="text-align: left; font-weight: bold;">P. O. NO.: </th>
-                <td><input type="text" style="width: 19rem"></td>
+                <td><input type="text" style="width: 20rem"></td>
             </tr>
             <tr>
                 <th style="text-align: left; font-weight: bold;">DRG. NO.: </th>
-                <td><input type="text" style="width: 19rem"></td>
+                <td><input type="text" style="width: 20rem"></td>
             </tr>
         </table>
     </div>
@@ -206,47 +230,55 @@
         <table>
             <tr>
                 <th style="text-align: left; font-weight: bold;">DATED: </th>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <th style="text-align: left; font-weight: bold;">DATED: </th>
-                <td><input type="text"></td>
-            </tr>
-            <tr>
-                <th style="text-align: left; font-weight: bold;">Requirded Value: </th>
-                <td><input type="text"></td>
+                <td><input type="text" style=" width: 7rem;"></td>
             </tr>
         </table>
     </div>
 
-    <div style="margin-top: 1rem;">
+    <div class="inline-right">
         <table>
             <tr>
-                <th style="text-align: left; font-weight: bold;">MATERIAL RECEIVED ON:</th>
-                <td><input type="text" style="width: 8rem;"></td>
-                <th style="text-align: left; font-weight: bold;">MATERIAL TESTED ON:</th>
-                <td><input type="text"></td>
+                <th style="text-align: left; font-weight: bold;">Requirded Value: </th>
+                <td><input type="text" style="width: 10rem;"></td>
             </tr>
         </table>
     </div>
+
+    <div class="inline-left" style="margin-top: 0.1rem;">
+        <table>
+            <tr>
+                <th style="text-align: left; font-weight: bold;">MATERIAL RECEIVED ON:</th>
+                <td><input type="text" style="width: 7rem;"></td>
+            </tr>
+        </table>
+    </div>
+    <div class="inline-right" style="margin-top: 0.1rem;">
+        <table>
+            <tr>
+                <th style="text-align: left; font-weight: bold;">MATERIAL TESTED ON:</th>
+                <td><input type="text" style="width: 7rem;"></td>
+            </tr>
+        </table>
+    </div>
+
 
     <div>
         <table>
             <tr>
                 <th style="text-align: left; font-weight: bold;">MATERIAL'S SPECIFICATION:</th>
-                <td><textarea cols="55" rows="1"></textarea></td>
+                <td><textarea cols="55" rows="1" style="width: 30rem; height: 1.2rem;"></textarea></td>
             </tr>
         </table>
     </div>
-
+    <hr id="foo">
     <div>
         <table>
             <tr>
                 <th style="text-align: left; font-weight: bold;">Messrs:</th>
-                <td><input type="text" placeholder="Organizanization Name" style="width: 35rem; padding-left: 0.5rem; font-weight: bold;"></td>
+                <td><input type="text" placeholder="Organizanization Name" style="width: 35rem; padding-left: 0.5rem; font-size: 1.13rem; font-weight: bold;"></td>
             </tr>
             <tr>
-                <td colspan="2"><textarea cols="76" rows="2" placeholder="Address.." style="padding-left: 0.5rem;"></textarea></td>
+                <td colspan="2"><textarea cols="76" rows="2" placeholder="Address.." style="padding-left: 0.5rem; margin-left: 3.95rem; width: 35rem;"></textarea></td>
             </tr>
         </table>
     </div>
@@ -261,23 +293,23 @@
     <hr class="marked-line">
 </header>
 
-<div class="container" style="text-align: center; margin-top: 0.5rem;">
+<div class="container" style="text-align: center; margin-top: 0.1rem;">
     <table class="inventory" id="inventory">
         <thead>
         <tr>
             <th style="width: 9%;"><span style="border-bottom: 1px solid black;">Qty</span></th>
-            <th style="width: 43%; text-align: left; padding-left: 1rem;"><span style="border-bottom: 1px solid black;">Description</span></th>
+            <th style="width: 47%; text-align: left; padding-left: 1rem;"><span style="border-bottom: 1px solid black;">Description</span></th>
             <th style="width: 14%;"><span style="border-bottom: 1px solid black;">No. of observation taken</span></th>
             <th style="width: 22%;"><span style="border-bottom: 1px solid black;">Hardness in BHN/RC</span></th>
-            <th style="width: 12%;"><span style="border-bottom: 1px solid black;">Remarks</span></th>
+            <th style="width: 8%;"><span style="border-bottom: 1px solid black;">Remarks</span></th>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td><button class="cut" onclick="deleteRow(this.parentNode.parentNode.rowIndex)">-</button><span><input type="text" style="width: 95%; text-align: center; height: 1.8rem;"></span></td>
-            <td><span><textarea cols="46"rows="2" style="text-align: left; padding-left: 0.2rem;"></textarea></span></td>
-            <td><span><input type="text" style="text-align: center; width: 100%; height: 1.8rem;"></span></td>
-            <td><span><textarea cols="21" rows="2" style="text-align: left; padding-left: 00.2rem;"></textarea></span></td>
+            <td><button class="cut" onclick="deleteRow(this.parentNode.parentNode.rowIndex)">-</button><span><input type="text" style="width: 95%; text-align: center; font-size: 0.80rem; height: 2.5rem;"></span></td>
+            <td><span><textarea cols="46"rows="2" style="text-align: left; height: 2.5rem; width: 20rem; font-size: 0.85rem; padding-left: 0.2rem;"></textarea></span></td>
+            <td><span><input type="text" style="text-align: center; width: 100%; font-size: 0.80rem; height: 2.5rem;"></span></td>
+            <td><span><textarea cols="21" rows="2" style="text-align: left; font-size: 0.80rem; width: 9rem; height: 2.5rem; padding-left: 00.2rem;"></textarea></span></td>
             <td></td>
         </tr>
         </tbody>
