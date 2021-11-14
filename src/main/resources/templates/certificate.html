@@ -103,18 +103,25 @@
         margin-top: 0.5rem;
         }
 
+        div.container {
+            margin-top: 0.1rem;
+            max-height: 28.5rem;
+            min-height: 28.5rem;
+            overflow-y: hidden;
+        }
+
         table.inventory {
             font-size: 75%;
             table-layout: fixed;
+            overflow: hidden;
             width: 100%;
-            max-height: 20rem !important;
-            min-height: 20rem !important;
             border-collapse: separate;
             border-spacing: 2px;
             margin: 0 0 3em;
             clear: both;
-            width: 100%;
         }
+
+
         table.inventory th {
             padding: 0.3em;
             position: relative;
@@ -156,7 +163,7 @@
         var rowNumber = 1;
 
         function addRow(){
-            while(rowNumber <= 6) {
+            if(rowNumber < 7) {
             rowNumber++;
             var table = document.getElementById("inventory");
             var row = table.insertRow(rowNumber);
@@ -167,10 +174,13 @@
             var cell5 = row.insertCell(4);
 
             cell1.innerHTML = '<button class="cut" onclick="deleteRow(this.parentNode.parentNode.rowIndex)">-</button><span><input type="text" style="width: 95%; text-align: center; font-size: 0.80rem; padding-bottom: 1.3rem; height: 1.2rem;"></span>';
-            cell2.innerHTML = '<span><textarea cols="46"rows="2" style="text-align: left; height: 2.5rem; max-height: 3.8rem; width: 20.56rem; font-size: 0.85rem; padding-left: 0.2rem; padding-bottom: 0.2rem; resize: vertical;"></textarea></span>';
+            cell2.innerHTML = '<span><textarea cols="46"rows="2" style="text-align: left; height: 2.5rem; max-height: 4.8rem; width: 20.56rem; font-size: 0.85rem; padding-left: 0.3rem; resize: vertical;"></textarea></span>';
             cell3.innerHTML = '<span><input type="text" style="text-align: center; width: 100%; font-size: 0.80rem; padding-bottom: 1.3rem; height: 1.2rem;"></span>';
-            cell4.innerHTML = '<span><textarea cols="21" rows="2" style="text-align: left; font-size: 0.80rem; width: 9.2rem; height: 2.5rem; padding-left: 00.2rem; resize: vertical;"></textarea></span>';
+            cell4.innerHTML = '<span><textarea cols="21" rows="2" style="text-align: left; font-size: 0.80rem; width: 9.2rem; height: 2.5rem; padding-left: 0.2rem; resize: vertical;"></textarea></span>';
             cell5.innerHTML = '';
+            }
+            else {
+                alert("You can't add more row !!");
             }
         }
 
@@ -286,7 +296,7 @@
     <hr class="marked-line">
 </header>
 
-<div class="container" style="text-align: center; margin-top: 0.1rem;">
+<div class="container">
     <table class="inventory" id="inventory">
         <thead>
         <tr>
@@ -300,9 +310,9 @@
         <tbody>
         <tr>
             <td><button class="cut" onclick="deleteRow(this.parentNode.parentNode.rowIndex)">-</button><span><input type="text" style="width: 95%; text-align: center; font-size: 0.80rem; padding-bottom: 1.3rem; height: 1.2rem;"></span></td>
-            <td><span><textarea cols="46"rows="2" style="text-align: left; height: 2.5rem; max-height: 3.8rem; width: 20.56rem; font-size: 0.85rem; padding-left: 0.2rem; resize: vertical;"></textarea></span></td>
+            <td><span><textarea cols="46"rows="2" style="text-align: left; height: 2.5rem; max-height: 4.8rem; width: 20.56rem; font-size: 0.85rem; padding-left: 0.3rem; resize: vertical;"></textarea></span></td>
             <td><span><input type="text" style="text-align: center; width: 100%; font-size: 0.80rem; padding-bottom: 1.3rem; height: 1.2rem;"></span></td>
-            <td><span><textarea cols="21" rows="2" style="text-align: left; font-size: 0.80rem; width: 9.2rem; height: 2.5rem; padding-left: 0.2rem; resize: vertical;"></textarea></span></td>
+            <td><span><textarea cols="21" rows="2" style="text-align: left; font-size: 0.80rem; width: 9.2rem; min-height: 2.5rem; padding-left: 0.2rem; resize: vertical;"></textarea></span></td>
             <td></td>
         </tr>
         </tbody>
